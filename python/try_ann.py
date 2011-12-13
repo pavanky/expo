@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from annalgos import *
+from ann import *
 
 Inputs = matrix([
 		[1,-1,-1],
