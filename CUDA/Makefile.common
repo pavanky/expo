@@ -1,0 +1,6 @@
+ # replace the path to the appropriate location
+CUDADIR=/usr/local/cuda
+
+ #Comment this line if using 32 bit
+OS=64
+
