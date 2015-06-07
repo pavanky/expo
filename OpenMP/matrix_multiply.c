@@ -11,7 +11,7 @@ void naive1(int M, int N, float *A,
 #pragma omp parallel for
 #endif
     for (k = 0; k < K; k++)
-    {	int m,n; float tmp;
+    {	register int m,n; register float tmp;
         for (m = 0; m < M; m++) {
             tmp = 0;
             for (n = 0; n < N; n++)
@@ -29,7 +29,7 @@ void naive2(int M, int N, float *A,
 #pragma omp parallel for
 #endif
     for (m = 0; m < M; m++)
-    {	int k,n; float tmp;
+    {	register int k,n; register float tmp;
         for (k = 0; k < K; k++) {
             tmp = 0;
             for (n = 0; n < N; n++)
@@ -48,16 +48,20 @@ void naivec(int M, int N, float *A,
 void trans(int M, int N, float *A,
            int K, float *B, float *C, float *S)
 {
+	int k;
 #if defined (_OPENMP)
 #pragma omp parallel for
 #endif
-    for (int k = 0; k < K; k++) {
-        for (int n = 0; n < N; n++)
-            S[k * N + n] = B[n * K + k];
-        for (int m = 0; m < M; m++) {
-            float tmp = 0;
+    for (k = 0; k < K; k++) {
+	    int n,m;
+	    float tmp;
+	    int k_x_N = k * N;
+        for (n = 0; n < N; n++)
+            S[k_x_N + n] = B[n * K + k];
+        for (m = 0; m < M; m++) {
+            tmp = 0;
             for (int n = 0; n < N; n++)
-                tmp += A[m * N +n] * S[k * N + n];
+                tmp += A[m * N +n] * S[k_x_N + n];
             C[m * K + k] = tmp;
         }
     }
