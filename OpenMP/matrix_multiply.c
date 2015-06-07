@@ -6,31 +6,37 @@
 void naive1(int M, int N, float *A,
             int K, float *B, float *C, float *S)
 {
+	int k;
 #if defined (_OPENMP)
 #pragma omp parallel for
 #endif
-    for (int k = 0; k < K; k++)
-        for (int m = 0; m < M; m++) {
-            float tmp = 0;
-            for (int n = 0; n < N; n++)
+    for (k = 0; k < K; k++)
+    {	int m,n; float tmp;
+        for (m = 0; m < M; m++) {
+            tmp = 0;
+            for (n = 0; n < N; n++)
                 tmp += A[m * N + n] * B[n * K + k];
             C[m * K + k] = tmp;
         }
+    }
 }
 
 void naive2(int M, int N, float *A,
             int K, float *B, float *C, float *S)
 {
+	int m;
 #if defined (_OPENMP)
 #pragma omp parallel for
 #endif
-    for (int m = 0; m < M; m++)
-        for (int k = 0; k < K; k++) {
-            float tmp = 0;
-            for (int n = 0; n < N; n++)
+    for (m = 0; m < M; m++)
+    {	int k,n; float tmp;
+        for (k = 0; k < K; k++) {
+            tmp = 0;
+            for (n = 0; n < N; n++)
                 tmp += A[m * N + n] * B[n * K + k];
             C[m * K + k] = tmp;
         }
+    }
 }
 
 void naivec(int M, int N, float *A,
